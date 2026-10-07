@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Microsoft Windows 98 Second Edition — [Simulator &amp; Virus Lab]</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="crt-enabled">
+
+  <!-- CRT Scanlines Overlay -->
+  <div id="crt-overlay"></div>
+
+  <!-- Fullscreen FX Canvas (Screen Melter / Matrix 1999 Rain) -->
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- Emergency Virus Disinfect Pill (Appears automatically when any virus is active) -->
+  <div id="panic-cure-bar">
+    <span>🚨 ACTIVE INFECTIONS: <span id="panic-virus-count">0</span></span>
+    <button id="panic-cure-btn" class="win-btn" style="background:#00aa00; color:#fff; font-weight:bold;">
+      🛡️ McAfee 98 Disinfect All (or Press ESC)
+    </button>
+  </div>
+
+  <!-- ======================================================================
+       BIOS POST & WINDOWS 98 CLOUD SPLASH SCREEN
+       ====================================================================== -->
+  <div id="boot-screen">
+    <div>
+      <div class="bios-header">
+        <div>
+          <div class="bios-highlight">Award Modular BIOS v4.51PG, An Energy Star Ally</div>
+          <div>Copyright (C) 1984-98, Award Software, Inc.</div>
+          <div style="margin-top:8px;">INTEL PENTIUM II MMX - 350 MHz</div>
+        </div>
+        <div class="energy-star">
+          ⚡ ENERGY STAR<br/>EPA POLLUTION PREVENTER
+        </div>
+      </div>
+
+      <div class="bios-lines" style="margin-top:20px;">
+        <p>Memory Test : <span id="bios-mem-counter" class="bios-highlight">0K</span></p>
+        <p>Award Plug and Play BIOS Extension v1.0A</p>
+        <p>Detecting Primary Master ... <span class="bios-highlight">QUANTUM FIREBALL 4.3GB HDD</span></p>
+        <p>Detecting Primary Slave  ... <span class="bios-highlight">CREATIVE 32X CD-ROM</span></p>
+        <p>Detecting Sound Card     ... <span class="bios-highlight">Sound Blaster 16 PnP (IRQ 5, DMA 1)</span></p>
+        <p>Detecting 3D Accelerator ... <span class="bios-highlight">3dfx Voodoo2 12MB SLI</span></p>
+        <p style="color:#00ff00; margin-top:14px;">Booting Microsoft Windows 98 Second Edition from C:\ ...</p>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; border-top:1px solid #555; padding-top:10px;">
+      <span>Press DEL to enter SETUP, ESC to skip Memory Test</span>
+      <span>10/07/1998-i440BX-W977TF-2A69KA1EC-00</span>
+    </div>
+
+    <!-- Windows 98 Cloud Splash Overlay -->
+    <div id="win98-splash">
+      <div class="splash-card">
+        <div class="splash-logo-flag">
+          <span class="flag-pane" style="background:#ff3300;"></span>
+          <span class="flag-pane" style="background:#00cc33;"></span>
+          <span class="flag-pane" style="background:#0066ff;"></span>
+          <span class="flag-pane" style="background:#ffcc00;"></span>
+        </div>
+        <div class="splash-title">Microsoft Windows <span>98</span></div>
+        <div class="splash-subtitle">Second Edition — Antigravity Creative Build</div>
+      </div>
+      <div class="splash-loader-bar"></div>
+    </div>
+
+    <button id="skip-boot-btn" class="win-btn skip-boot-btn" style="font-weight:bold;">
+      ⏩ Skip Boot &amp; Enter Desktop
+    </button>
+  </div>
+
+  <!-- ======================================================================
+       BLUE SCREEN OF DEATH (BSOD) OVERLAY
+       ====================================================================== -->
+  <div id="bsod-screen">
+    <div class="bsod-container">
+      <div class="bsod-title-wrapper">
+        <span class="bsod-title" id="bsod-title-text">Windows</span>
+      </div>
+      <p>A fatal exception <span id="bsod-code-text">0E : 0028:C0011E36 in VXD VMM(01)</span> has occurred.</p>
+      <p id="bsod-reason-text" style="color:#ffff55;">
+        Your computer ran into a 1998 problem because you downloaded too much free RAM over a 56k modem.
+      </p>
+      <p style="margin-top:20px;">* Press any key or click anywhere to return to Windows 98.</p>
+      <p>* Press CTRL+ALT+DEL again to restart your computer. You will lose any unsaved high scores in Minesweeper.</p>
+      <p style="text-align:center; margin-top:32px;">
+        Press any key to continue <span class="bsod-blink">_</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       DESKTOP ENVIRONMENT
+       ====================================================================== -->
+  <div id="desktop-environment">
+    <div id="desktop-icons"></div>
+    <div id="selection-marquee"></div>
+  </div>
+
+  <!-- ======================================================================
+       ROGUE CLIPPY / BONZI DESKTOP ASSISTANT
+       ====================================================================== -->
+  <div id="rogue-assistant">
+    <div class="assistant-bubble">
+      <div id="assistant-text" style="margin-bottom:8px; line-height:1.35;">
+        It looks like you're exploring Windows 98! Want me to unleash a harmless retro virus?
+      </div>
+      <div style="display:flex; gap:4px; justify-content:space-between;">
+        <button id="assistant-joke-btn" class="win-btn win-btn-small">💬 Advice</button>
+        <button id="assistant-roll-btn" class="win-btn win-btn-small">🌀 Barrel Roll</button>
+        <button id="assistant-hide-btn" class="win-btn win-btn-small">✕ Shoo</button>
+      </div>
+    </div>
+    <div class="assistant-character" title="Click me for unsolicited 1998 tech advice!">📎</div>
+  </div>
+
+  <!-- ======================================================================
+       RIGHT-CLICK DESKTOP CONTEXT MENU
+       ====================================================================== -->
+  <div id="context-menu" class="bevel-outset">
+    <div class="ctx-item" data-ctx="refresh"><span>🔄 Refresh Desktop</span></div>
+    <div class="start-divider"></div>
+    <div class="ctx-item" data-ctx="viruslab"><span>☣️ Open Virus Lab 98</span></div>
+    <div class="ctx-item" data-ctx="clippy"><span>📎 Summon Rogue Clippy</span></div>
+    <div class="ctx-item" data-ctx="cure"><span>🛡️ Disinfect All Viruses</span></div>
+    <div class="start-divider"></div>
+    <div class="ctx-item" data-ctx="bsod"><span>💙 Trigger Blue Screen</span></div>
+    <div class="ctx-item" data-ctx="display"><span>🖥️ Properties &amp; Themes</span></div>
+  </div>
+
+  <!-- ======================================================================
+       START MENU
+       ====================================================================== -->
+  <div id="start-menu" class="bevel-outset">
+    <div class="start-sidebar">
+      <div class="start-sidebar-text">Windows<span>98</span></div>
+    </div>
+    <div class="start-items">
+      <div class="start-item" data-start="viruslab">
+        <span class="start-item-icon">☣️</span>
+        <span><b>Virus Lab &amp; Prank Center</b></span>
+      </div>
+      <div class="start-item" data-start="ie">
+        <span class="start-item-icon">🌐</span>
+        <span>Internet Explorer 4.0</span>
+      </div>
+      <div class="start-item" data-start="mines">
+        <span class="start-item-icon">💣</span>
+        <span>Minesweeper (Troll Mode)</span>
+      </div>
+      <div class="start-item" data-start="paint">
+        <span class="start-item-icon">🎨</span>
+        <span>MS Paint 98</span>
+      </div>
+      <div class="start-item" data-start="winamp">
+        <span class="start-item-icon">⚡</span>
+        <span>Winamp 2.11 Synth</span>
+      </div>
+      <div class="start-item" data-start="dos">
+        <span class="start-item-icon">📟</span>
+        <span>MS-DOS Prompt</span>
+      </div>
+      <div class="start-item" data-start="notepad">
+        <span class="start-item-icon">📝</span>
+        <span>Notepad (passwords.txt)</span>
+      </div>
+      <div class="start-divider"></div>
+      <div class="start-item" data-start="display">
+        <span class="start-item-icon">🖥️</span>
+        <span>Display Themes &amp; BSOD</span>
+      </div>
+      <div class="start-item" data-start="cure">
+        <span class="start-item-icon">🛡️</span>
+        <span>McAfee 98 Disinfect All</span>
+      </div>
+      <div class="start-item" data-start="bsod">
+        <span class="start-item-icon">💙</span>
+        <span>Instant Blue Screen (BSOD)</span>
+      </div>
+      <div class="start-divider"></div>
+      <div class="start-item" data-start="shutdown">
+        <span class="start-item-icon">🔌</span>
+        <span>Shut Down...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       TASKBAR
+       ====================================================================== -->
+  <div id="taskbar">
+    <button id="start-btn" class="win-btn">
+      <span style="font-size:15px;">🪟</span>
+      <span>Start</span>
+    </button>
+
+    <div class="taskbar-divider"></div>
+
+    <div id="quick-launch">
+      <button class="quick-btn" data-quick="virus" title="Open Virus Lab 98">☣️</button>
+      <button class="quick-btn" data-quick="ie" title="Launch Internet Explorer 4.0">🌐</button>
+      <button class="quick-btn" data-quick="paint" title="Launch MS Paint 98">🎨</button>
+      <button class="quick-btn" data-quick="cure" title="Emergency Disinfect All Viruses">🛡️</button>
+    </div>
+
+    <div class="taskbar-divider"></div>
+
+    <div id="taskbar-windows"></div>
+
+    <div id="system-tray" class="bevel-status">
+      <span id="tray-shield" class="tray-icon" title="Virus Lab &amp; Quarantine">☣️</span>
+      <span id="tray-crt" class="tray-icon" title="Toggle CRT Monitor Scanlines">📺</span>
+      <span id="tray-sound" class="tray-icon" title="Toggle Retro Synth Audio">🔊</span>
+      <span id="tray-clock">12:00 PM</span>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="audio.js"></script>
+  <script src="viruses.js"></script>
+  <script src="apps.js"></script>
+  <script src="os.js"></script>
+</body>
+</html>
